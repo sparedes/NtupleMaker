@@ -10,6 +10,7 @@ use GaudiInterface 	           GaudiInterface-* 	             External
 
 use AsgTools AsgTools-* Control/AthToolSupport
 use AthAnalysisBaseComps AthAnalysisBaseComps-* Control
+use AsgAnalysisInterfaces AsgAnalysisInterfaces-* PhysicsAnalysis/Interfaces
 
 ## EDM packages
 
@@ -31,6 +32,9 @@ use xAODEventInfo              xAODEventInfo-*                 Event/xAOD
 # tool packages
 use METTriggerToolBox          METTriggerToolBox-*
 use TrigDecisionTool           TrigDecisionTool-*              Trigger/TrigAnalysis
+use GoodRunsLists GoodRunsLists-* DataQuality
+use TrigBunchCrossingTool      TrigBunchCrossingTool-*         Trigger/TrigAnalysis
+use TrigAnalysisInterfaces     TrigAnalysisInterfaces-*        Trigger/TrigAnalysis
 use xAODRootAccess             xAODRootAccess-*                Control
 use xAODTrigMissingET          xAODTrigMissingET-*             Event/xAOD
 use METInterface METInterface-* Reconstruction/MET

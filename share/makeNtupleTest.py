@@ -3,9 +3,9 @@
 #---- Minimal joboptions -------
 
 #theApp.EvtMax=1000                                         #says how many events to run over. Set to -1 for all events
-#theApp.EvtMax=10000                                         #says how many events to run over. Set to -1 for all events
+theApp.EvtMax=10000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=100000                                         #says how many events to run over. Set to -1 for all events
-theApp.EvtMax=200000                                         #says how many events to run over. Set to -1 for all events
+#theApp.EvtMax=200000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=500000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=-1                                         #says how many events to run over. Set to -1 for all events
 from glob import glob
@@ -19,10 +19,23 @@ jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/paredes/JETM11/d
 msgLevel = DEBUG
 
 import AthenaPoolCnvSvc.ReadAthenaPool                   #sets up reading of POOL files (e.g. xAODs)
+## for BunchCrossingTool setup
+from PyUtils import AthFile
+from AthenaCommon.GlobalFlags import globalflags
+from TrigBunchCrossingTool.BunchCrossingTool import BunchCrossingTool
+af = AthFile.fopen(svcMgr.EventSelector.InputCollections[0]) 
+isMC = 'IS_SIMULATION' in af.fileinfos['evt_type']
+globalflags.DataSource = 'geant4' if isMC else 'data' 
+globalflags.DatabaseInstance = 'CONDBR2' 
+
+
 #import AthenaRootComps.ReadAthenaxAODHybrid             #alternative for FAST xAOD reading!
 
+ToolSvc += CfgMgr.GoodRunsListSelectionTool("GoodRunsListSelectionTool",GoodRunsListVec=["/home/paredes/ETMissFW/data16_13TeV.periodAllYear_DetStatus-v88-pro20-21_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml"]) 
+
+
 ToolSvc += CfgMgr.METTrig__GlobalConfigTool("GlobalConfigTool",
-                                            ConfigFiles = ["/home/paredes/TestArea/METTrigger/METTriggerToolBox/share/WZCommon.json"] ,
+                                            ConfigFiles = ["/home/burr/Programs/Projects/DualUse/PublicMETTriggerTools/METTriggerToolBox/share/WZCommon.json"] ,
                                             OutputLevel = msgLevel)
 ToolSvc += CfgMgr.METTrig__AnalysisToolBox("AnalysisToolBox",
                                            GlobalConfigTool = ToolSvc.GlobalConfigTool,
@@ -36,9 +49,14 @@ ToolSvc += CfgMgr.TrigConf__xAODConfigTool("xAODConfigTool")
 ToolSvc += CfgMgr.Trig__TrigDecisionTool("TrigDecisionTool",
                                          ConfigTool = ToolSvc.xAODConfigTool,
                                          TrigDecisionKey = "xTrigDecision")
+## setting up BunchCrossingTool
+if isMC: ToolSvc += BunchCrossingTool( "MC" )
+else: ToolSvc += BunchCrossingTool( "LHC" )
 
 algseq = CfgMgr.AthSequencer("AthAlgSeq")                #gets the main AthSequencer
 algseq += CfgMgr.AthEventCounter(Frequency = 1000)                                 #adds an instance of your alg to it
+algseq += CfgMgr.METTrig__PreliminaryAlg("PreliminaryAlg",
+                                         GRLTool = ToolSvc.GoodRunsListSelectionTool)
 algseq += CfgMgr.METTrig__GetObjects("GetObjects",
                                      ToolBox = ToolSvc.AnalysisToolBox,
                                      GlobalConfigTool = ToolSvc.GlobalConfigTool,

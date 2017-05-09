@@ -1,4 +1,4 @@
-#Fri May  5 17:03:47 2017"""Automatically generated. DO NOT EDIT please"""
+#Tue May  9 15:53:33 2017"""Automatically generated. DO NOT EDIT please"""
 from GaudiKernel.GaudiHandles import *
 from GaudiKernel.Proxy.Configurable import *
 
@@ -67,6 +67,7 @@ class MakeTree( ConfigurableAlgorithm ) :
     'UserStore' : ServiceHandle('UserDataSvc/UserDataSvc'), # GaudiHandle
     'Decorator' : '', # str
     'GlobalConfigTool' : PublicToolHandle('METTrig::IGlobalConfigTool'), # GaudiHandle
+    'BunchCrossingTool' : PublicToolHandle('Trig::IBunchCrossingTool'), # GaudiHandle
     'ToolBox' : PublicToolHandle('METTrig::AnalysisToolBox'), # GaudiHandle
   }
   _propertyDocDct = { 

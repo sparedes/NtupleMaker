@@ -1885,6 +1885,10 @@
  /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/xAODMissingET/xAODMissingET/versions/MissingET_v1.icc \
  /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/xAODMissingET/xAODMissingET/versions/MissingETContainer_v1.h \
  /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/xAODMissingET/xAODMissingET/versions/MissingETContainer_v1.icc \
+ /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigAnalysisInterfaces/TrigAnalysisInterfaces/IBunchCrossingTool.h \
+ /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigBunchCrossingTool/TrigBunchCrossingTool/BunchCrossingToolBase.h \
+ /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigBunchCrossingTool/TrigBunchCrossingTool/BunchCrossing.h \
+ /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigBunchCrossingTool/TrigBunchCrossingTool/BunchTrain.h \
  /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/sw/lcg/releases/LCG_81e/ROOT/6.04.16/x86_64-slc6-gcc49-opt/include/TTree.h \
  /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/sw/lcg/releases/LCG_81e/ROOT/6.04.16/x86_64-slc6-gcc49-opt/include/TBranch.h \
  /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/sw/lcg/releases/LCG_81e/ROOT/6.04.16/x86_64-slc6-gcc49-opt/include/TObjArray.h \
@@ -5679,6 +5683,14 @@
 /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/xAODMissingET/xAODMissingET/versions/MissingETContainer_v1.h:
 
 /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/xAODMissingET/xAODMissingET/versions/MissingETContainer_v1.icc:
+
+/cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigAnalysisInterfaces/TrigAnalysisInterfaces/IBunchCrossingTool.h:
+
+/cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigBunchCrossingTool/TrigBunchCrossingTool/BunchCrossingToolBase.h:
+
+/cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigBunchCrossingTool/TrigBunchCrossingTool/BunchCrossing.h:
+
+/cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/AthAnalysisBase/2.4.29/InstallArea/include/TrigBunchCrossingTool/TrigBunchCrossingTool/BunchTrain.h:
 
 /cvmfs/atlas.cern.ch/repo/sw/software/AthAnalysisBase/x86_64-slc6-gcc49-opt/2.4.29/sw/lcg/releases/LCG_81e/ROOT/6.04.16/x86_64-slc6-gcc49-opt/include/TTree.h:
 
