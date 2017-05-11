@@ -31,7 +31,7 @@ namespace {
 
 MakeTree::MakeTree( const std::string& name, ISvcLocator* pSvcLocator ) : AthAlgorithm( name, pSvcLocator ){
 
-  declareProperty("Decorator", m_decorator);
+  //OLD declareProperty("EventSelection", m_eventSelection);
   declareProperty("GlobalConfigTool", m_configTool);
   declareProperty("BunchCrossingTool", m_bunchCrossTool);
   declareProperty("ToolBox", m_toolBox);
@@ -99,9 +99,15 @@ StatusCode MakeTree::initialize() {
   t_metTree->Branch("actualMu",&actualMu);
   t_metTree->Branch("averageMu",&averageMu);
   t_metTree->Branch("bunchCrossingID",&bunchCrossingID);
+  t_metTree->Branch("nPrimaryVtx",&nPrimaryVtx);
   //BunchCrossing branches
   t_metTree->Branch("distanceFromFront",&distanceFromFront);//distance of the spacific bunch from the FRONT of the train
   t_metTree->Branch("distanceFromTail",&distanceFromTail);//distance of the spacific bunch from the TAIL of the train
+
+  t_metTree->Branch("passWenu",&passWenu);
+  t_metTree->Branch("passWmunu",&passWmunu);
+  t_metTree->Branch("passZee",&passZee);
+  t_metTree->Branch("passZmumu",&passZmumu);
 
 
   ATH_CHECK( histSvc->regTree("/METTREE/metTree", t_metTree) );
@@ -131,6 +137,8 @@ StatusCode MakeTree::finalize() {
 
 StatusCode MakeTree::execute() {  
   ATH_MSG_DEBUG ("Executing " << name() << "...");
+  // Linking branches to vairables...
+  //
   //offlineMET
   t_metTree->SetBranchAddress("offlineMET",&offlineMET);
   t_metTree->SetBranchAddress("offlineMET_x",&offlineMET_x);
@@ -174,9 +182,15 @@ StatusCode MakeTree::execute() {
   t_metTree->SetBranchAddress("actualMu",&actualMu);
   t_metTree->SetBranchAddress("averageMu",&averageMu);
   t_metTree->SetBranchAddress("bunchCrossingID",&bunchCrossingID);
+  t_metTree->SetBranchAddress("nPrimaryVtx",&nPrimaryVtx);
   //Bunch Information
   t_metTree->SetBranchAddress("distanceFromFront",&distanceFromFront);
   t_metTree->SetBranchAddress("distanceFromTail",&distanceFromTail);
+  //Signal selection bools
+  t_metTree->SetBranchAddress("passWenu",&passWenu);
+  t_metTree->SetBranchAddress("passWmunu",&passWmunu);
+  t_metTree->SetBranchAddress("passZee",&passZee);
+  t_metTree->SetBranchAddress("passZmumu",&passZmumu);
 
   //HLT trigger emulation
   const xAOD::TrigMissingETContainer* hlt_cell_Cont(0);
@@ -225,6 +239,12 @@ StatusCode MakeTree::execute() {
     return StatusCode::FAILURE;
   }
   const auto met = *metItr;
+  //finding offlineMet quantities to fill branches
+  offlineMET = met->met()*GeV;
+  offlineMET_x = met->mpx()*GeV;
+  offlineMET_y = met->mpy()*GeV;
+  offlineMET_sumet = met->sumet()*GeV;
+  offlineMET_phi = met->phi();
 
   //EventInfo quantities
   const xAOD::EventInfo* evtInfo(0);
@@ -242,36 +262,44 @@ StatusCode MakeTree::execute() {
   //Finding number of primary vertices
   const xAOD::VertexContainer* vertices(0);
   ATH_CHECK( evtStore()->retrieve(vertices, "PrimaryVertices") );
-  
-  int nPrimaryVtx = 0;
+  nPrimaryVtx = 0;
   for (const xAOD::Vertex* vtx : *vertices) {
     if (vtx->vertexType() == xAOD::VxType::PriVtx) {
       nPrimaryVtx++;
     }
   }
 
+  passWenu = false;
+  passWmunu = false;
+  passZee = false;
+  passZmumu = false;
 
   //Checking if event passes signal selection
-  static SG::AuxElement::ConstAccessor<char> cacc_decorator("Pass_"+m_decorator);
-  if (cacc_decorator(*evtInfo)){
-    ATH_MSG_DEBUG (m_decorator << " event pre-selected");
-    //finding offlineMet quantities to fill branches
-    offlineMET = met->met()*GeV;
-    offlineMET_x = met->mpx()*GeV;
-    offlineMET_y = met->mpy()*GeV;
-    offlineMET_sumet = met->sumet()*GeV;
-    offlineMET_phi = met->phi();
+  //booleans eventSelections
+  static SG::AuxElement::ConstAccessor<char> cacc_eventWenu("Pass_Wenu");
+  static SG::AuxElement::ConstAccessor<char> cacc_eventWmunu("Pass_Wmunu");
+  static SG::AuxElement::ConstAccessor<char> cacc_eventZee("Pass_Zee");
+  static SG::AuxElement::ConstAccessor<char> cacc_eventZmumu("Pass_Zmumu");
+  if (cacc_eventWenu(*evtInfo)) passWenu = true;    
+  else if (cacc_eventWmunu(*evtInfo)) passWmunu = true;   
+  else if (cacc_eventZee(*evtInfo)) passZee = true;     
+  else if (cacc_eventZmumu(*evtInfo)) passZmumu = true;   
     
-    //Fill TTree if event passed signal selection
-    t_metTree->Fill();
-    //if (m_toolBox->isPassed("HLT_xe100_L1XE50")) met->met()*GeV;
-  }
+  //OLD event selection
+  //std::string selString = "Pass_"+m_eventSelection;
+  //static SG::AuxElement::ConstAccessor<char> cacc_eventSelection(selString);
+  //if (cacc_eventSelection(*evtInfo)){
+  //  t_metTree->Fill();
+  //Fill TTree if event passed signal selection
+  //}
   //debug int i = 0;
   //debug offlineMET = gRandom->Rndm();
   //debug if (i%100 == 0) ATH_MSG_DEBUG ("value was " << offlineMET << "...");
   //debug i++;
 
   
+  //Fill all branches in the TTree
+  t_metTree->Fill();
   return StatusCode::SUCCESS;
 }
 

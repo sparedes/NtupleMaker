@@ -172,6 +172,25 @@ rulecheckerclean ::  $(rulechecker_constituentsclean)
 #	@/bin/echo " rulecheckerclean ok."
 
 #-- end of group ------
+#-- start of group ------
+
+all_groups :: ctest
+
+ctest :: $(ctest_dependencies)  $(ctest_pre_constituents) $(ctest_constituents)  $(ctest_post_constituents)
+	$(echo) "ctest ok."
+
+#	@/bin/echo " ctest ok."
+
+clean :: allclean
+
+ctestclean ::  $(ctest_constituentsclean)
+	$(echo) $(ctest_constituentsclean)
+	$(echo) "ctestclean ok."
+
+#	@echo $(ctest_constituentsclean)
+#	@/bin/echo " ctestclean ok."
+
+#-- end of group ------
 #-- start of constituent ------
 
 cmt_install_joboptions_has_no_target_tag = 1
@@ -1755,6 +1774,128 @@ ifndef PEDANTIC
 	$(echo) "(constituents.make) Starting $@ install_includes"
 	$(echo) Using default action for $@
 	$(echo) "(constituents.make) $@ install_includes done"
+endif
+
+#-- end of constituent ------
+#-- start of constituent ------
+
+cmt_myctest_has_no_target_tag = 1
+
+#--------------------------------------
+
+ifdef cmt_myctest_has_target_tag
+
+cmt_local_tagfile_myctest = $(bin)$(NtupleMaker_tag)_myctest.make
+cmt_final_setup_myctest = $(bin)setup_myctest.make
+cmt_local_myctest_makefile = $(bin)myctest.make
+
+myctest_extratags = -tag_add=target_myctest
+
+else
+
+cmt_local_tagfile_myctest = $(bin)$(NtupleMaker_tag).make
+cmt_final_setup_myctest = $(bin)setup.make
+cmt_local_myctest_makefile = $(bin)myctest.make
+
+endif
+
+not_myctest_dependencies = { n=0; for p in $?; do m=0; for d in $(myctest_dependencies); do if [ $$p = $$d ]; then m=1; break; fi; done; if [ $$m -eq 0 ]; then n=1; break; fi; done; [ $$n -eq 1 ]; }
+
+ifdef STRUCTURED_OUTPUT
+myctestdirs :
+	@if test ! -d $(bin)myctest; then $(mkdir) -p $(bin)myctest; fi
+	$(echo) "STRUCTURED_OUTPUT="$(bin)myctest
+else
+myctestdirs : ;
+endif
+
+ifdef cmt_myctest_has_target_tag
+
+ifndef QUICK
+$(cmt_local_myctest_makefile) : $(myctest_dependencies) build_library_links
+	$(echo) "(constituents.make) Building myctest.make"; \
+	  $(cmtexe) -tag=$(tags) $(myctest_extratags) build constituent_config -out=$(cmt_local_myctest_makefile) myctest
+else
+$(cmt_local_myctest_makefile) : $(myctest_dependencies) $(cmt_build_library_linksstamp) $(use_requirements)
+	@if [ ! -f $@ ] || [ ! -f $(cmt_local_tagfile_myctest) ] || \
+	  [ ! -f $(cmt_final_setup_myctest) ] || \
+	  $(not_myctest_dependencies) ; then \
+	  test -z "$(cmtmsg)" || \
+	  echo "$(CMTMSGPREFIX)" "(constituents.make) Building myctest.make"; \
+	  $(cmtexe) -tag=$(tags) $(myctest_extratags) build constituent_config -out=$(cmt_local_myctest_makefile) myctest; \
+	  fi
+endif
+
+else
+
+ifndef QUICK
+$(cmt_local_myctest_makefile) : $(myctest_dependencies) build_library_links
+	$(echo) "(constituents.make) Building myctest.make"; \
+	  $(cmtexe) -f=$(bin)myctest.in -tag=$(tags) $(myctest_extratags) build constituent_makefile -without_cmt -out=$(cmt_local_myctest_makefile) myctest
+else
+$(cmt_local_myctest_makefile) : $(myctest_dependencies) $(cmt_build_library_linksstamp) $(bin)myctest.in
+	@if [ ! -f $@ ] || [ ! -f $(cmt_local_tagfile_myctest) ] || \
+	  [ ! -f $(cmt_final_setup_myctest) ] || \
+	  $(not_myctest_dependencies) ; then \
+	  test -z "$(cmtmsg)" || \
+	  echo "$(CMTMSGPREFIX)" "(constituents.make) Building myctest.make"; \
+	  $(cmtexe) -f=$(bin)myctest.in -tag=$(tags) $(myctest_extratags) build constituent_makefile -without_cmt -out=$(cmt_local_myctest_makefile) myctest; \
+	  fi
+endif
+
+endif
+
+#	  $(cmtexe) -tag=$(tags) $(myctest_extratags) build constituent_makefile -out=$(cmt_local_myctest_makefile) myctest
+
+myctest :: $(myctest_dependencies) $(cmt_local_myctest_makefile) dirs myctestdirs
+	$(echo) "(constituents.make) Starting myctest"
+	@if test -f $(cmt_local_myctest_makefile); then \
+	  $(MAKE) -f $(cmt_local_myctest_makefile) myctest; \
+	  fi
+#	@$(MAKE) -f $(cmt_local_myctest_makefile) myctest
+	$(echo) "(constituents.make) myctest done"
+
+clean :: myctestclean ;
+
+myctestclean :: $(myctestclean_dependencies) ##$(cmt_local_myctest_makefile)
+	$(echo) "(constituents.make) Starting myctestclean"
+	@-if test -f $(cmt_local_myctest_makefile); then \
+	  $(MAKE) -f $(cmt_local_myctest_makefile) myctestclean; \
+	fi
+	$(echo) "(constituents.make) myctestclean done"
+#	@-$(MAKE) -f $(cmt_local_myctest_makefile) myctestclean
+
+##	  /bin/rm -f $(cmt_local_myctest_makefile) $(bin)myctest_dependencies.make
+
+install :: myctestinstall ;
+
+myctestinstall :: $(myctest_dependencies) $(cmt_local_myctest_makefile)
+	$(echo) "(constituents.make) Starting $@"
+	@if test -f $(cmt_local_myctest_makefile); then \
+	  $(MAKE) -f $(cmt_local_myctest_makefile) install; \
+	  fi
+#	@-$(MAKE) -f $(cmt_local_myctest_makefile) install
+	$(echo) "(constituents.make) $@ done"
+
+uninstall : myctestuninstall
+
+$(foreach d,$(myctest_dependencies),$(eval $(d)uninstall_dependencies += myctestuninstall))
+
+myctestuninstall : $(myctestuninstall_dependencies) ##$(cmt_local_myctest_makefile)
+	$(echo) "(constituents.make) Starting $@"
+	@-if test -f $(cmt_local_myctest_makefile); then \
+	  $(MAKE) -f $(cmt_local_myctest_makefile) uninstall; \
+	  fi
+#	@$(MAKE) -f $(cmt_local_myctest_makefile) uninstall
+	$(echo) "(constituents.make) $@ done"
+
+remove_library_links :: myctestuninstall ;
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ myctest"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ myctest done"
 endif
 
 #-- end of constituent ------

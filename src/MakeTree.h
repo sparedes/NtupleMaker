@@ -27,7 +27,7 @@ class MakeTree: public ::AthAlgorithm {
   //ToolHandle<Trig::TrigDecisionTool> m_trigDecTool;
   ToolHandle<Trig::IBunchCrossingTool> m_bunchCrossTool;
   //ToolHandle<Trig::BunchCrossingToolBase> m_bunchCrossTool;
-  std::string m_decorator;
+  //OLD std::string m_eventSelection;
   TH1* h_HLT_xe100_L1XE50;
   TH1F* h_offline_MET;
   TH2* h2_offlineVsCellMET;
@@ -72,9 +72,15 @@ class MakeTree: public ::AthAlgorithm {
   uint32_t bunchCrossingID;
   float actualMu;
   float averageMu;
+  int nPrimaryVtx;
 
   int distanceFromFront;
   int distanceFromTail; 
+
+  bool passWenu;
+  bool passWmunu;
+  bool passZee;
+  bool passZmumu;
 }; 
 #endif //> !NTUPLEMAKER_MAKETREE_H
 

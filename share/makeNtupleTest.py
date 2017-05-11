@@ -3,11 +3,11 @@
 #---- Minimal joboptions -------
 
 #theApp.EvtMax=1000                                         #says how many events to run over. Set to -1 for all events
-theApp.EvtMax=10000                                         #says how many events to run over. Set to -1 for all events
+#theApp.EvtMax=10000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=100000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=200000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=500000                                         #says how many events to run over. Set to -1 for all events
-#theApp.EvtMax=-1                                         #says how many events to run over. Set to -1 for all events
+theApp.EvtMax=-1                                         #says how many events to run over. Set to -1 for all events
 from glob import glob
 # jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/burr/xAOD/testFiles/JETM11/data16_13TeV.00304494.physics_Main.merge.DAOD_JETM11.f716_m1620_p2950/*")   #insert your list of input files here (do this before next lines)
 #jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/burr/xAOD/testFiles/mc15_13TeV.363436.Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CVetoBVeto.merge.AOD.e4715_s2726_r9226_r8423/AOD.10988161._000001.pool.root.1")   #insert your list of input files here (do this before next lines)
@@ -31,7 +31,7 @@ globalflags.DatabaseInstance = 'CONDBR2'
 
 #import AthenaRootComps.ReadAthenaxAODHybrid             #alternative for FAST xAOD reading!
 
-ToolSvc += CfgMgr.GoodRunsListSelectionTool("GoodRunsListSelectionTool",GoodRunsListVec=["/home/paredes/ETMissFW/data16_13TeV.periodAllYear_DetStatus-v88-pro20-21_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml"]) 
+ToolSvc += CfgMgr.GoodRunsListSelectionTool("GoodRunsListSelectionTool",GoodRunsListVec=["GoodRunsLists/data16_13TeV/20170215/data16_13TeV.periodAllYear_DetStatus-v88-pro20-21_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml"]) 
 
 
 ToolSvc += CfgMgr.METTrig__GlobalConfigTool("GlobalConfigTool",
@@ -55,6 +55,7 @@ else: ToolSvc += BunchCrossingTool( "LHC" )
 
 algseq = CfgMgr.AthSequencer("AthAlgSeq")                #gets the main AthSequencer
 algseq += CfgMgr.AthEventCounter(Frequency = 1000)                                 #adds an instance of your alg to it
+#Run PreliminaryAlg first to apply GRL, find if event has primary vertex, etc. 
 algseq += CfgMgr.METTrig__PreliminaryAlg("PreliminaryAlg",
                                          GRLTool = ToolSvc.GoodRunsListSelectionTool)
 algseq += CfgMgr.METTrig__GetObjects("GetObjects",
@@ -69,21 +70,10 @@ algseq += CfgMgr.METTrig__EventSelectionAlg("WZCommonSelections",
                                             RootStreamName = "CUTFLOW",
                                             RootDirName = "Events",
                                             OutputLevel = msgLevel)
-
-#algseq += CfgMgr.METTrig__WZCommonSelections("WZCommonSelections_old",
-#                                              ToolBox = ToolSvc.AnalysisToolBox,
-#                                              GlobalConfigTool = ToolSvc.GlobalConfigTool,
-#                                              Decorator = "WZCommon",
-#                                              RootStreamName = "CUTFLOW",
-#                                              RootDirName = "Events_old",
-#                                              OutputLevel = msgLevel)
-#
 algseq += CfgMgr.MakeTree("MakeTree",
                           ToolBox = ToolSvc.AnalysisToolBox,
                           GlobalConfigTool = ToolSvc.GlobalConfigTool,
-                          Decorator = "Wmunu",
-                          #RootStreamName = "METHIST",
-                          #RootDirName = "Events",
+                          #OLD EventSelection = "Zmumu",
                           OutputLevel = msgLevel)
 
 #-------------------------------
@@ -103,7 +93,6 @@ print ToolSvc
 
 if not hasattr(svcMgr, 'THistSvc'): svcMgr += CfgMgr.THistSvc() #only add the histogram service if not already present (will be the case in this jobo)
 svcMgr.THistSvc.Output += ["CUTFLOW DATAFILE='cutflow.root' OPT='RECREATE'"] #add an output root file stream
-svcMgr.THistSvc.Output += ["METHIST DATAFILE='metHist.root' OPT='RECREATE'"] #add an output root file stream
 svcMgr.THistSvc.Output += ["METTREE DATAFILE='metTree.root' OPT='RECREATE'"] #add an output root file stream
 
 ##--------------------------------------------------------------------
@@ -134,3 +123,4 @@ svcMgr.THistSvc.Output += ["METTREE DATAFILE='metTree.root' OPT='RECREATE'"] #ad
 
 include("AthAnalysisBaseComps/SuppressLogging.py")              #Optional include to suppress as much athena output as possible. Keep at bottom of joboptions so that it doesn't suppress the logging of the things you have configured above
 MessageSvc.Format = "% F%60W%S%7W%R%T %0W%M"
+
