@@ -81,6 +81,14 @@ class MakeTree: public ::AthAlgorithm {
   bool passWmunu;
   bool passZee;
   bool passZmumu;
+
+  bool pass_HLT_xe100_L1XE50;
+  bool pass_HLT_xe110_mht_L1XE50;
+  bool pass_HLT_xe160_tc_lcw_L1XE50;
+  bool pass_HLT_xe140_pufit_L1XE50;
+  bool pass_HLT_xe140_pueta_L1XE50;
+  bool pass_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50;
+
 }; 
 #endif //> !NTUPLEMAKER_MAKETREE_H
 

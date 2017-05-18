@@ -2,23 +2,24 @@
 
 #---- Minimal joboptions -------
 
-#theApp.EvtMax=1000                                         #says how many events to run over. Set to -1 for all events
+theApp.EvtMax=1000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=10000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=100000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=200000                                         #says how many events to run over. Set to -1 for all events
 #theApp.EvtMax=500000                                         #says how many events to run over. Set to -1 for all events
-theApp.EvtMax=-1                                         #says how many events to run over. Set to -1 for all events
+#theApp.EvtMax=-1                                         #says how many events to run over. Set to -1 for all events
 from glob import glob
-# jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/burr/xAOD/testFiles/JETM11/data16_13TeV.00304494.physics_Main.merge.DAOD_JETM11.f716_m1620_p2950/*")   #insert your list of input files here (do this before next lines)
+
 #jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/burr/xAOD/testFiles/mc15_13TeV.363436.Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CVetoBVeto.merge.AOD.e4715_s2726_r9226_r8423/AOD.10988161._000001.pool.root.1")   #insert your list of input files here (do this before next lines)
 
-# testing on SP's test files
-jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/paredes/JETM11/data16_13TeV.00307732.physics_Main.merge.DAOD_JETM11.f741_m1673_p2950_tid10313937_00/DAOD_JETM11.*.root*")
-
+#SP's test files
+jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/paredes/JETM11/data16_13TeV.00307732.physics_Main.merge.DAOD_JETM11.f741_m1673_p2950_tid10313937_00/DAOD_JETM11.*.root*")#insert your list of input files here (do this before next lines)
 
 msgLevel = DEBUG
 
 import AthenaPoolCnvSvc.ReadAthenaPool                   #sets up reading of POOL files (e.g. xAODs)
+#import AthenaRootComps.ReadAthenaxAODHybrid             #alternative for FAST xAOD reading!
+
 ## for BunchCrossingTool setup
 from PyUtils import AthFile
 from AthenaCommon.GlobalFlags import globalflags
@@ -29,13 +30,11 @@ globalflags.DataSource = 'geant4' if isMC else 'data'
 globalflags.DatabaseInstance = 'CONDBR2' 
 
 
-#import AthenaRootComps.ReadAthenaxAODHybrid             #alternative for FAST xAOD reading!
 
 ToolSvc += CfgMgr.GoodRunsListSelectionTool("GoodRunsListSelectionTool",GoodRunsListVec=["GoodRunsLists/data16_13TeV/20170215/data16_13TeV.periodAllYear_DetStatus-v88-pro20-21_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml"]) 
 
-
 ToolSvc += CfgMgr.METTrig__GlobalConfigTool("GlobalConfigTool",
-                                            ConfigFiles = ["/home/burr/Programs/Projects/DualUse/PublicMETTriggerTools/METTriggerToolBox/share/WZCommon.json"] ,
+                                            ConfigFiles = ["METTriggerToolBox/share/WZCommon.json"] ,
                                             OutputLevel = msgLevel)
 ToolSvc += CfgMgr.METTrig__AnalysisToolBox("AnalysisToolBox",
                                            GlobalConfigTool = ToolSvc.GlobalConfigTool,
@@ -55,6 +54,7 @@ else: ToolSvc += BunchCrossingTool( "LHC" )
 
 algseq = CfgMgr.AthSequencer("AthAlgSeq")                #gets the main AthSequencer
 algseq += CfgMgr.AthEventCounter(Frequency = 1000)                                 #adds an instance of your alg to it
+
 #Run PreliminaryAlg first to apply GRL, find if event has primary vertex, etc. 
 algseq += CfgMgr.METTrig__PreliminaryAlg("PreliminaryAlg",
                                          GRLTool = ToolSvc.GoodRunsListSelectionTool)
