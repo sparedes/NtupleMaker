@@ -1,10 +1,4 @@
-
 #include "GaudiKernel/DeclareFactoryEntries.h"
-
-#include "../MakeEff.h"
-
-DECLARE_ALGORITHM_FACTORY( MakeEff )
-
 
 #include "../MakeTree.h"
 DECLARE_ALGORITHM_FACTORY( MakeTree )

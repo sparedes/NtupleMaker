@@ -3,7 +3,7 @@
 #====================================
 #  Library NtupleMaker
 #
-#   Generated Thu May 11 12:30:39 2017  by paredes
+#   Generated Tue May 30 12:37:19 2017  by paredes
 #
 #====================================
 
@@ -107,7 +107,7 @@ NtupleMaker :: dirs  NtupleMakerLIB
 NtupleMakerLIB :: $(NtupleMakershstamp)
 	$(echo) "NtupleMaker : library ok"
 
-$(NtupleMakerlib) :: $(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o
+$(NtupleMakerlib) :: $(bin)MakeTree.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o
 	$(lib_echo) "static library $@"
 	$(lib_silent) cd $(bin); \
 	  $(ar) $(NtupleMakerlib) $?
@@ -130,9 +130,9 @@ $(NtupleMakerlib) :: $(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $
 # while the stamp was created (error??) 
 #
 
-$(NtupleMakerlibname).$(shlibsuffix) :: $(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o $(use_requirements) $(NtupleMakerstamps)
+$(NtupleMakerlibname).$(shlibsuffix) :: $(bin)MakeTree.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o $(use_requirements) $(NtupleMakerstamps)
 	$(lib_echo) "shared library $@"
-	$(lib_silent) $(shlibbuilder) $(shlibflags) -o $@ $(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o $(NtupleMaker_shlibflags)
+	$(lib_silent) $(shlibbuilder) $(shlibflags) -o $@ $(bin)MakeTree.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o $(NtupleMaker_shlibflags)
 	$(lib_silent) cat /dev/null >$(NtupleMakerstamp) && \
 	  cat /dev/null >$(NtupleMakershstamp)
 
@@ -143,8 +143,8 @@ $(NtupleMakershstamp) :: $(NtupleMakerlibname).$(shlibsuffix)
 
 NtupleMakerclean ::
 	$(cleanup_echo) objects NtupleMaker
-	$(cleanup_silent) /bin/rm -f $(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o
-	$(cleanup_silent) /bin/rm -f $(patsubst %.o,%.d,$(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o) $(patsubst %.o,%.dep,$(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o) $(patsubst %.o,%.d.stamp,$(bin)MakeTree.o $(bin)MakeEff.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o)
+	$(cleanup_silent) /bin/rm -f $(bin)MakeTree.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o
+	$(cleanup_silent) /bin/rm -f $(patsubst %.o,%.d,$(bin)MakeTree.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o) $(patsubst %.o,%.dep,$(bin)MakeTree.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o) $(patsubst %.o,%.d.stamp,$(bin)MakeTree.o $(bin)NtupleMaker_load.o $(bin)NtupleMaker_entries.o)
 	$(cleanup_silent) cd $(bin); /bin/rm -rf NtupleMaker_deps NtupleMaker_dependencies.make
 
 #-----------------------------------------------------------------
@@ -215,36 +215,6 @@ $(bin)NtupleMaker_dependencies.make : $(src)MakeTree.cxx
 $(bin)$(binobj)MakeTree.o : $(MakeTree_cxx_dependencies)
 	$(cpp_echo) $(src)MakeTree.cxx
 	$(cpp_silent) $(cppcomp) -o $@ $(use_pp_cppflags) $(NtupleMaker_pp_cppflags) $(lib_NtupleMaker_pp_cppflags) $(MakeTree_pp_cppflags) $(use_cppflags) $(NtupleMaker_cppflags) $(lib_NtupleMaker_cppflags) $(MakeTree_cppflags) $(MakeTree_cxx_cppflags)  $(src)MakeTree.cxx
-
-endif
-
-#-- end of cpp_library ------------------
-#-- start of cpp_library -----------------
-
-ifneq (-MMD -MP -MF $*.d -MQ $@,)
-
-ifneq ($(MAKECMDGOALS),NtupleMakerclean)
-ifneq ($(MAKECMDGOALS),uninstall)
--include $(bin)$(binobj)MakeEff.d
-
-$(bin)$(binobj)MakeEff.d :
-
-$(bin)$(binobj)MakeEff.o : $(cmt_final_setup_NtupleMaker)
-
-$(bin)$(binobj)MakeEff.o : $(src)MakeEff.cxx
-	$(cpp_echo) $(src)MakeEff.cxx
-	$(cpp_silent) $(cppcomp) -MMD -MP -MF $*.d -MQ $@ -o $@ $(use_pp_cppflags) $(NtupleMaker_pp_cppflags) $(lib_NtupleMaker_pp_cppflags) $(MakeEff_pp_cppflags) $(use_cppflags) $(NtupleMaker_cppflags) $(lib_NtupleMaker_cppflags) $(MakeEff_cppflags) $(MakeEff_cxx_cppflags)  $(src)MakeEff.cxx
-endif
-endif
-
-else
-$(bin)NtupleMaker_dependencies.make : $(MakeEff_cxx_dependencies)
-
-$(bin)NtupleMaker_dependencies.make : $(src)MakeEff.cxx
-
-$(bin)$(binobj)MakeEff.o : $(MakeEff_cxx_dependencies)
-	$(cpp_echo) $(src)MakeEff.cxx
-	$(cpp_silent) $(cppcomp) -o $@ $(use_pp_cppflags) $(NtupleMaker_pp_cppflags) $(lib_NtupleMaker_pp_cppflags) $(MakeEff_pp_cppflags) $(use_cppflags) $(NtupleMaker_cppflags) $(lib_NtupleMaker_cppflags) $(MakeEff_cppflags) $(MakeEff_cxx_cppflags)  $(src)MakeEff.cxx
 
 endif
 
