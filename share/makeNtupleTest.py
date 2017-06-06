@@ -10,7 +10,7 @@ theApp.EvtMax=1000                                         #says how many events
 #theApp.EvtMax=-1                                         #says how many events to run over. Set to -1 for all events
 from glob import glob
 
-#jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/burr/xAOD/testFiles/mc15_13TeV.363436.Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CVetoBVeto.merge.AOD.e4715_s2726_r9226_r8423/AOD.10988161._000001.pool.root.1")   #insert your list of input files here (do this before next lines)
+jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/burr/xAOD/testFiles/mc15_13TeV.363436.Sherpa_NNPDF30NNLO_Wmunu_Pt0_70_CVetoBVeto.merge.AOD.e4715_s2726_r9226_r8423/AOD.10988161._000001.pool.root.1")   #insert your list of input files here (do this before next lines)
 
 #SP's test files
 jps.AthenaCommonFlags.FilesInput = glob("/data/atlas/atlasdata3/paredes/JETM11/data16_13TeV.00307732.physics_Main.merge.DAOD_JETM11.f741_m1673_p2950_tid10313937_00/DAOD_JETM11.*.root*")#insert your list of input files here (do this before next lines)

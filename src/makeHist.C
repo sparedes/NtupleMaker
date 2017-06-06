@@ -13,7 +13,7 @@ using namespace std;
 
 namespace {
   //TODO make this configurable
-  string signalSelection("Zmumu");
+  string signalSelection("Wmunu");//This can be: "Zmumu", "Zee","Wmunu", "Wenu"
   float GeV(0.001);
   int offCol(kBlue);
   int cellCol(kYellow+1);
@@ -112,34 +112,47 @@ void treeToHist()
   //Book histograms
   //
   // book basic simple met hist
-  h_offlineMET = new TH1D("h_offlineMET ", " ;offline E_{T}^{miss}  [GeV]", 50,0,400);
-  h_hlt_cell_met = new TH1D("h_hlt_cell_met ", " ;cell E_{T}^{miss}  [GeV]", 50,0,400);
-  h_hlt_mht_met = new TH1D("h_hlt_mht_met ", " ;mht E_{T}^{miss}  [GeV]", 50,0,400);
-  h_hlt_topoCluster_met = new TH1D("h_hlt_topoCluster_met ", " ;tc E_{T}^{miss}  [GeV]", 50,0,400);
-  h_hlt_pufit_met = new TH1D("h_hlt_pufit_met ", " ;pufit E_{T}^{miss}  [GeV]", 50,0,400);
-  h_hlt_pueta_met = new TH1D("h_hlt_pueta_met ", " ;pueta E_{T}^{miss}  [GeV]", 50,0,400);
+  h_offlineMET = new TH1D("h_offlineMET"," ;E_{T}^{miss} [GeV]", 50,0,400);
+  h_highMu_offlineMET = new TH1D("h_highMu_offlineMET"," ;E_{T}^{miss} [GeV]", 50,0,400);
+  h_lowMu_offlineMET = new TH1D("h_lowMu_offlineMET"," ;E_{T}^{miss} [GeV]", 50,0,400);
+  h_hlt_cell_met = new TH1D("h_hlt_cell_met"," ;cell E_{T}^{miss} [GeV]", 50,0,400);
+  h_hlt_mht_met = new TH1D("h_hlt_mht_met"," ;mht E_{T}^{miss} [GeV]", 50,0,400);
+  h_hlt_topoCluster_met = new TH1D("h_hlt_topoCluster_met"," ;tc E_{T}^{miss} [GeV]", 50,0,400);
+  h_hlt_pufit_met = new TH1D("h_hlt_pufit_met"," ;pufit E_{T}^{miss} [GeV]", 50,0,400);
+  h_hlt_pueta_met = new TH1D("h_hlt_pueta_met"," ;pueta E_{T}^{miss} [GeV]", 50,0,400);
 
 
   // book hist for Efficiency
-  h_offMET_HLT_xe100_L1XE50 = new TH1D("h_offMET_HLT_xe100_L1XE50 ", " ;h_offMET_HLT_xe100_L1XE50 E_{T}^{miss}  [GeV]", 50,0,400);
-  h_offMET_HLT_xe110_mht_L1XE50 = new TH1D("h_offMET_HLT_xe110_mht_L1XE50 ", " ;h_offMET_HLT_xe110_mht_L1XE50 E_{T}^{miss}  [GeV]", 50,0,400);
-  h_offMET_HLT_xe140_pufit_L1XE50 = new TH1D("h_offMET_HLT_xe140_pufit_L1XE50 ", " ;h_offMET_HLT_xe140_pufit_L1XE50 E_{T}^{miss}  [GeV]", 50,0,400);
-  h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = new TH1D("h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 ", " ;h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 E_{T}^{miss}  [GeV]", 50,0,400);
+  h_offMET_HLT_xe100_L1XE50 = new TH1D("h_offMET_HLT_xe100_L1XE50"," ;h_offMET_HLT_xe100_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_offMET_HLT_xe110_mht_L1XE50 = new TH1D("h_offMET_HLT_xe110_mht_L1XE50"," ;h_offMET_HLT_xe110_mht_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_offMET_HLT_xe140_pufit_L1XE50 = new TH1D("h_offMET_HLT_xe140_pufit_L1XE50"," ;h_offMET_HLT_xe140_pufit_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = new TH1D("h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50"," ;h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+
+  h_highMu_offMET_HLT_xe100_L1XE50 = new TH1D("h_highMu_offMET_HLT_xe100_L1XE50"," ;h_highMu_offMET_HLT_xe100_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_highMu_offMET_HLT_xe110_mht_L1XE50 = new TH1D("h_highMu_offMET_HLT_xe110_mht_L1XE50"," ;h_highMu_offMET_HLT_xe110_mht_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_highMu_offMET_HLT_xe140_pufit_L1XE50 = new TH1D("h_highMu_offMET_HLT_xe140_pufit_L1XE50"," ;h_highMu_offMET_HLT_xe140_pufit_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = new TH1D("h_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50"," ;h_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+
+  h_lowMu_offMET_HLT_xe100_L1XE50 = new TH1D("h_lowMu_offMET_HLT_xe100_L1XE50"," ;h_lowMu_offMET_HLT_xe100_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_lowMu_offMET_HLT_xe110_mht_L1XE50 = new TH1D("h_lowMu_offMET_HLT_xe110_mht_L1XE50"," ;h_lowMu_offMET_HLT_xe110_mht_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_lowMu_offMET_HLT_xe140_pufit_L1XE50 = new TH1D("h_lowMu_offMET_HLT_xe140_pufit_L1XE50"," ;h_lowMu_offMET_HLT_xe140_pufit_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
+  h_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = new TH1D("h_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50"," ;h_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 E_{T}^{miss} [GeV]", 50,0,400);
 
   //sample 2D correlation plots
-  h2_offlineVscellMET = new TH2D("offlineVScellMet", "offline vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);offline E_{T}^{miss}, #mu invisible  [GeV];  cell E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_mhtVscellMET = new TH2D("mhtVScellMet", "mht vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);mht E_{T}^{miss}  [GeV];  cell E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_topoClusterVscellMET = new TH2D("topoClusterVScellMet", "topoCluster vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);tc E_{T}^{miss}  [GeV];  cell E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_pufitVscellMET = new TH2D("pufitVScellMet", "pufit vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pufit E_{T}^{miss}  [GeV];  cell E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_puetaVscellMET = new TH2D("puetaVScellMet", "pueta vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pueta E_{T}^{miss}  [GeV];  cell E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
+  h2_offlineVscellMET = new TH2D("offlineVScellMet","offline vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);E_{T}^{miss}, [GeV](offline, no #mu);  cell E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_mhtVscellMET = new TH2D("mhtVScellMet","mht vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);mht E_{T}^{miss} [GeV];  cell E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_topoClusterVscellMET = new TH2D("topoClusterVScellMet","topoCluster vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);tc E_{T}^{miss} [GeV];  cell E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_pufitVscellMET = new TH2D("pufitVScellMet","pufit vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pufit E_{T}^{miss} [GeV];  cell E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_puetaVscellMET = new TH2D("puetaVScellMet","pueta vs  cell  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pueta E_{T}^{miss} [GeV];  cell E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
 
-  h2_offlineVsmhtMET = new TH2D("offlineVSmhtMET", "offline vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);offline E_{T}^{miss}, #mu invisible  [GeV];  mht E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_cellVsmhtMET = new TH2D("cellVSmhtMET", "cell vs mht MET (xAOD#rightarrow Ntuple#rightarrow Histogram);cell E_{T}^{miss}  [GeV];  mht E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_topoClusterVsmhtMET = new TH2D("topoClusterVSmhtMET", "topoCluster vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);tc E_{T}^{miss}  [GeV];  mht E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_pufitVsmhtMET = new TH2D("pufitVSmhtMET", "pufit vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pufit E_{T}^{miss}  [GeV];  mht E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
-  h2_puetaVsmhtMET = new TH2D("puetaVSmhtMET", "pueta vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pueta E_{T}^{miss}  [GeV];  mht E_{T}^{miss}  [GeV]", 50,0,400,50,0,400);
+  h2_offlineVsmhtMET = new TH2D("offlineVSmhtMET","offline vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);E_{T}^{miss}, [GeV](offline, no #mu);  mht E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_cellVsmhtMET = new TH2D("cellVSmhtMET","cell vs mht MET (xAOD#rightarrow Ntuple#rightarrow Histogram);cell E_{T}^{miss} [GeV];  mht E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_topoClusterVsmhtMET = new TH2D("topoClusterVSmhtMET","topoCluster vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);tc E_{T}^{miss} [GeV];  mht E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_pufitVsmhtMET = new TH2D("pufitVSmhtMET","pufit vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pufit E_{T}^{miss} [GeV];  mht E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
+  h2_puetaVsmhtMET = new TH2D("puetaVSmhtMET","pueta vs  mht  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);pueta E_{T}^{miss} [GeV];  mht E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
 
 
+  h2_offlineVspufitMET = new TH2D("offlineVSpufitMet","offline vs  pufit  MET (xAOD#rightarrow Ntuple#rightarrow Histogram);E_{T}^{miss}, [GeV](offline, no #mu);  pufit E_{T}^{miss} [GeV]", 50,0,400,50,0,400);
 
 
   //read all entries and fill the histograms
@@ -149,10 +162,10 @@ void treeToHist()
     t_metTree->GetEntry(i);
     //TODO is there a way to do this outside the loop?/a better way? 
     bool eventSelected;
-    if(signalSelection == "Wenu") eventSelected = passWenu; 
-    if(signalSelection == "Wmunu") eventSelected = passWmunu; 
-    if(signalSelection == "Zee") eventSelected = passZee; 
-    if(signalSelection == "Zmumu") eventSelected = passZmumu; 
+    if(signalSelection =="Wenu") eventSelected = passWenu; 
+    if(signalSelection =="Wmunu") eventSelected = passWmunu; 
+    if(signalSelection =="Zee") eventSelected = passZee; 
+    if(signalSelection =="Zmumu") eventSelected = passZmumu; 
 
     //perform signal selection
     //TODO allow multiple sinal selection at the time, make hist for all selected
@@ -166,6 +179,7 @@ void treeToHist()
 
       //Example correlation histograms
       h2_offlineVscellMET->Fill(offlineMET,hlt_cell_met);
+      h2_offlineVspufitMET->Fill(offlineMET,hlt_pufit_met);
       h2_mhtVscellMET->Fill(hlt_mht_met,hlt_cell_met);
       h2_topoClusterVscellMET->Fill(hlt_topoCluster_met,hlt_cell_met);
       h2_pufitVscellMET->Fill(hlt_pufit_met,hlt_cell_met);
@@ -175,7 +189,6 @@ void treeToHist()
       h2_cellVsmhtMET->Fill(hlt_cell_met,hlt_mht_met);
       h2_topoClusterVsmhtMET->Fill(hlt_topoCluster_met,hlt_mht_met);
       h2_pufitVsmhtMET->Fill(hlt_pufit_met,hlt_mht_met);
-      h2_puetaVsmhtMET->Fill(hlt_pueta_met,hlt_mht_met);
 
       //fill histograms for turn on curves
       if (pass_HLT_xe100_L1XE50)  h_offMET_HLT_xe100_L1XE50->Fill(offlineMET);
@@ -183,7 +196,24 @@ void treeToHist()
       if (pass_HLT_xe140_pufit_L1XE50)  h_offMET_HLT_xe140_pufit_L1XE50->Fill(offlineMET);
       if (pass_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50)  h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->Fill(offlineMET);
 
-      if (i%50000 == 0) cout<<"processing event  "<<i<<endl<<"offline/cell met:  "<<offlineMET<<"  /   "<<hlt_cell_met<<endl;
+      //Efficiencies with high and low pileup
+      // work in progressif (averageMu >= 20){
+      // work in progress  h_highMu_offlineMET->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe100_L1XE50)  h_highMu_offMET_HLT_xe100_L1XE50->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe110_mht_L1XE50)  h_highMu_offMET_HLT_xe110_mht_L1XE50->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe140_pufit_L1XE50)  h_highMu_offMET_HLT_xe140_pufit_L1XE50->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50)  h_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->Fill(offlineMET);
+      // work in progress}
+
+      // work in progressif (averageMu <= 20){
+      // work in progress  h_lowMu_offlineMET->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe100_L1XE50)  h_lowMu_offMET_HLT_xe100_L1XE50->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe110_mht_L1XE50)  h_lowMu_offMET_HLT_xe110_mht_L1XE50->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe140_pufit_L1XE50)  h_lowMu_offMET_HLT_xe140_pufit_L1XE50->Fill(offlineMET);
+      // work in progress  if (pass_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50)  h_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->Fill(offlineMET);
+      // work in progress}
+
+      if (i%50000 == 0) cout<<"processing event "<<i<<endl<<"offline/cell met: "<<offlineMET<<"  /  "<<hlt_cell_met<<endl;
     }
   }
   //cout<<"after loop"<<endl;
@@ -213,6 +243,7 @@ void treeToHist()
   h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->Write();
 
   h2_offlineVscellMET->Write();
+  h2_offlineVspufitMET->Write();
   h2_mhtVscellMET->Write();
   h2_topoClusterVscellMET->Write();
   h2_pufitVscellMET->Write();
@@ -225,24 +256,104 @@ void treeToHist()
   h2_puetaVsmhtMET->Write();
 
 
+  TFile *myEffFile = new TFile("metEfficiencies.root","recreate");
   //make cumulative efficiency curve
   //TEfficiency
   TGraphAsymmErrors* ef_offMET_HLT_xe100_L1XE50;
   TGraphAsymmErrors* ef_offMET_HLT_xe140_pufit_L1XE50;
   TGraphAsymmErrors* ef_offMET_HLT_xe110_mht_L1XE50;
   TGraphAsymmErrors* ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50;
-  //TEfficiency* ef_hlt_mht_met        ;
-  //TEfficiency* ef_hlt_topoCluster_met;
-  //TEfficiency* ef_hlt_pufit_met      ;
-  //TEfficiency* ef_hlt_pueta_met      ;
+
+  // work in progress TGraphAsymmErrors* ef_highMu_offMET_HLT_xe100_L1XE50;
+  // work in progress TGraphAsymmErrors* ef_highMu_offMET_HLT_xe140_pufit_L1XE50;
+  // work in progress TGraphAsymmErrors* ef_highMu_offMET_HLT_xe110_mht_L1XE50;
+  // work in progress TGraphAsymmErrors* ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50;
+
+  // work in progress TGraphAsymmErrors* ef_lowMu_offMET_HLT_xe100_L1XE50;
+  // work in progress TGraphAsymmErrors* ef_lowMu_offMET_HLT_xe140_pufit_L1XE50;
+  // work in progress TGraphAsymmErrors* ef_lowMu_offMET_HLT_xe110_mht_L1XE50;
+  // work in progress TGraphAsymmErrors* ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50;
 
 
-  TFile *myEffFile = new TFile("metEfficiencies.root","recreate");
+  // work in progress if(TEfficiency::CheckConsistency(*h_highMu_offMET_HLT_xe140_pufit_L1XE50->GetCumulative(kFALSE),*h_highMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_highMu_offMET_HLT_xe140_pufit_L1XE50 = new TGraphAsymmErrors(h_highMu_offMET_HLT_xe140_pufit_L1XE50->GetCumulative(kFALSE),h_highMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_highMu_offMET_HLT_xe140_pufit_L1XE50->SetName("ef_highMu_offMET_HLT_xe140_pufit_L1XE50"); 
+  // work in progress   ef_highMu_offMET_HLT_xe140_pufit_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_highMu_offMET_HLT_xe140_pufit_L1XE50->SetLineColor(pufitCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe140_pufit_L1XE50->SetMarkerColor(pufitCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe140_pufit_L1XE50->Write(); 
+  // work in progress }
+  // work in progress if(TEfficiency::CheckConsistency(*h_highMu_offMET_HLT_xe110_mht_L1XE50->GetCumulative(kFALSE),*h_highMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50 = new TGraphAsymmErrors(h_highMu_offMET_HLT_xe110_mht_L1XE50->GetCumulative(kFALSE),h_highMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50->SetName("ef_highMu_offMET_HLT_xe110_mht_L1XE50"); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50->SetLineColor(mhtCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50->SetMarkerColor(mhtCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50->Write(); 
+  // work in progress }
+  // work in progress if(TEfficiency::CheckConsistency(*h_highMu_offMET_HLT_xe100_L1XE50->GetCumulative(kFALSE),*h_highMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_highMu_offMET_HLT_xe100_L1XE50 = new TGraphAsymmErrors(h_highMu_offMET_HLT_xe100_L1XE50->GetCumulative(kFALSE),h_highMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_highMu_offMET_HLT_xe100_L1XE50->SetName("ef_highMu_offMET_HLT_xe100_L1XE50"); 
+  // work in progress   ef_highMu_offMET_HLT_xe100_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_highMu_offMET_HLT_xe100_L1XE50->SetLineColor(cellCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe100_L1XE50->SetMarkerColor(cellCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe100_L1XE50->Write(); 
+  // work in progress }
+  // work in progress if(TEfficiency::CheckConsistency(*h_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->GetCumulative(kFALSE),*h_highMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = new TGraphAsymmErrors(h_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->GetCumulative(kFALSE),h_highMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetName("ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50"); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetLineColor(cellCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetMarkerColor(cellCol); 
+  // work in progress   ef_highMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->Write(); 
+  // work in progress }
+
+  // work in progress if(TEfficiency::CheckConsistency(*h_lowMu_offMET_HLT_xe140_pufit_L1XE50->GetCumulative(kFALSE),*h_lowMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_lowMu_offMET_HLT_xe140_pufit_L1XE50 = new TGraphAsymmErrors(h_lowMu_offMET_HLT_xe140_pufit_L1XE50->GetCumulative(kFALSE),h_lowMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_lowMu_offMET_HLT_xe140_pufit_L1XE50->SetName("ef_lowMu_offMET_HLT_xe140_pufit_L1XE50"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe140_pufit_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe140_pufit_L1XE50->SetLineColor(pufitCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe140_pufit_L1XE50->SetMarkerColor(pufitCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe140_pufit_L1XE50->Write(); 
+  // work in progress }
+  // work in progress if(TEfficiency::CheckConsistency(*h_lowMu_offMET_HLT_xe110_mht_L1XE50->GetCumulative(kFALSE),*h_lowMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50 = new TGraphAsymmErrors(h_lowMu_offMET_HLT_xe110_mht_L1XE50->GetCumulative(kFALSE),h_lowMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50->SetName("ef_lowMu_offMET_HLT_xe110_mht_L1XE50"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50->SetLineColor(mhtCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50->SetMarkerColor(mhtCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50->Write(); 
+  // work in progress }
+  // work in progress if(TEfficiency::CheckConsistency(*h_lowMu_offMET_HLT_xe100_L1XE50->GetCumulative(kFALSE),*h_lowMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_lowMu_offMET_HLT_xe100_L1XE50 = new TGraphAsymmErrors(h_lowMu_offMET_HLT_xe100_L1XE50->GetCumulative(kFALSE),h_lowMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_lowMu_offMET_HLT_xe100_L1XE50->SetName("ef_lowMu_offMET_HLT_xe100_L1XE50"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe100_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe100_L1XE50->SetLineColor(cellCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe100_L1XE50->SetMarkerColor(cellCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe100_L1XE50->Write(); 
+  // work in progress }
+  // work in progress if(TEfficiency::CheckConsistency(*h_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->GetCumulative(kFALSE),*h_lowMu_offlineMET->GetCumulative(kFALSE))) 
+  // work in progress { 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = new TGraphAsymmErrors(h_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->GetCumulative(kFALSE),h_lowMu_offlineMET->GetCumulative(kFALSE)); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetName("ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetLineColor(cellCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetMarkerColor(cellCol); 
+  // work in progress   ef_lowMu_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->Write(); 
+  // work in progress }
+
   if(TEfficiency::CheckConsistency(*h_offMET_HLT_xe140_pufit_L1XE50->GetCumulative(kFALSE),*h_offlineMET->GetCumulative(kFALSE))) 
   { 
     ef_offMET_HLT_xe140_pufit_L1XE50 = new TGraphAsymmErrors(h_offMET_HLT_xe140_pufit_L1XE50->GetCumulative(kFALSE),h_offlineMET->GetCumulative(kFALSE)); 
     ef_offMET_HLT_xe140_pufit_L1XE50->SetName("ef_offMET_HLT_xe140_pufit_L1XE50"); 
-    ef_offMET_HLT_xe140_pufit_L1XE50->SetTitle(";offline E_{Tmiss} [GeV]; Efficiency"); 
+    ef_offMET_HLT_xe140_pufit_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
     ef_offMET_HLT_xe140_pufit_L1XE50->SetLineColor(pufitCol); 
     ef_offMET_HLT_xe140_pufit_L1XE50->SetMarkerColor(pufitCol); 
     ef_offMET_HLT_xe140_pufit_L1XE50->Write(); 
@@ -251,7 +362,7 @@ void treeToHist()
   { 
     ef_offMET_HLT_xe110_mht_L1XE50 = new TGraphAsymmErrors(h_offMET_HLT_xe110_mht_L1XE50->GetCumulative(kFALSE),h_offlineMET->GetCumulative(kFALSE)); 
     ef_offMET_HLT_xe110_mht_L1XE50->SetName("ef_offMET_HLT_xe110_mht_L1XE50"); 
-    ef_offMET_HLT_xe110_mht_L1XE50->SetTitle(";offline E_{Tmiss} [GeV]; Efficiency"); 
+    ef_offMET_HLT_xe110_mht_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
     ef_offMET_HLT_xe110_mht_L1XE50->SetLineColor(mhtCol); 
     ef_offMET_HLT_xe110_mht_L1XE50->SetMarkerColor(mhtCol); 
     ef_offMET_HLT_xe110_mht_L1XE50->Write(); 
@@ -260,7 +371,7 @@ void treeToHist()
   { 
     ef_offMET_HLT_xe100_L1XE50 = new TGraphAsymmErrors(h_offMET_HLT_xe100_L1XE50->GetCumulative(kFALSE),h_offlineMET->GetCumulative(kFALSE)); 
     ef_offMET_HLT_xe100_L1XE50->SetName("ef_offMET_HLT_xe100_L1XE50"); 
-    ef_offMET_HLT_xe100_L1XE50->SetTitle(";offline E_{Tmiss} [GeV]; Efficiency"); 
+    ef_offMET_HLT_xe100_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
     ef_offMET_HLT_xe100_L1XE50->SetLineColor(cellCol); 
     ef_offMET_HLT_xe100_L1XE50->SetMarkerColor(cellCol); 
     ef_offMET_HLT_xe100_L1XE50->Write(); 
@@ -269,11 +380,12 @@ void treeToHist()
   { 
     ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = new TGraphAsymmErrors(h_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->GetCumulative(kFALSE),h_offlineMET->GetCumulative(kFALSE)); 
     ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetName("ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50"); 
-    ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetTitle(";offline E_{Tmiss} [GeV]; Efficiency"); 
+    ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency"); 
     ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetLineColor(cellCol); 
     ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->SetMarkerColor(cellCol); 
     ef_offMET_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50->Write(); 
   }
+
   myEffFile->Close();
 
   //cout<<"closing new file"<<endl;

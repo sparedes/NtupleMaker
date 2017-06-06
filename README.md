@@ -16,7 +16,7 @@ git clone https://github.com/sparedes/NtupleMaker.git # or download as zip and e
 Now setup athena and compile
 
 ```
-asetup AthAnalysisBase,2.4.29 
+asetup AthAnalysisBase,2.4.29,here 
 cmt find_packages
 cmt compile
 ```
@@ -26,11 +26,12 @@ The package's main algorithm is MakeTree (_NtupleMaker/src/MakeTree.\*_), which 
 
 
 Check the job options file in `NtupleMaker/share/makeNtupleTest.py` for an example of how to use NtupleMaker.
-To run, simply do: 
+To run, and save log, simply do (the second line only cleans up the area after the code runs): 
 
 
 ```
-athena NtupleMaker/share/makeNtupleTest.py
+athena NtupleMaker/share/makeNtupleTest.py  2>&1 | tee log.txt
+rm -f athfile* PoolFileCatalog* eventLoopHeartBeat.txt
 ``` 
 
 from a directory with an athena setup (tested using 2.4.29). 
@@ -74,7 +75,25 @@ or
 
  + Plot all the efficiencies in one plot by doing:
 ```
-root [3] plotHist("pdf")
+root [3] plotAllEff("pdf")
 ```
 
+
+### Running on the Grid 
+To run on the grid do (from the athena area):
+
+```
+lsetup panda
+pathena path/to/jobOptions --inDS data.set.name  --outDS user.USERNAME.output
+```
+for example:
+```
+pathena NtupleMaker/share/makeNtupleTest.py --inDS data16_13TeV.00308084.physics_Main.merge.DAOD_JETM11.f741_m1673_p2950  --outDS user.saparede.METTrigger.PlotingFW.gridTest
+```
+
+To run on multiple datasets, one can do so with:
+```
+pathena NtupleMaker/share/makeNtupleTest.py --inDsTxt dsList.txt --useContElementBoundary --addNthFieldOfInDSToLFN 1,2  --outDS user.saparede.METTrigger.PlotingFW.gridTest
+```
+where dsList.txt is a text file with the dataset names on each line.
 

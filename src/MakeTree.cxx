@@ -16,6 +16,7 @@
 #include "TrigAnalysisInterfaces/IBunchCrossingTool.h"
 
 #include "xAODTracking/VertexContainer.h"
+#include <fstream>
 //#include "TEfficiency.h"
 
 
@@ -24,15 +25,13 @@ namespace {
   float GeV(0.001);
 } 
 
-
+//INPROGRESS read triggers from list void makeTigBrances(TTree*,TString){}
 
 MakeTree::MakeTree( const std::string& name, ISvcLocator* pSvcLocator ) : AthAlgorithm( name, pSvcLocator ){
 
   declareProperty("GlobalConfigTool", m_configTool);
   declareProperty("BunchCrossingTool", m_bunchCrossTool);
   declareProperty("ToolBox", m_toolBox);
-  
-
 }
 
 
@@ -104,7 +103,16 @@ StatusCode MakeTree::initialize() {
   t_metTree->Branch("passZee",&passZee);
   t_metTree->Branch("passZmumu",&passZmumu);
 
-  //Lowest unprescaled trigger booleans
+  //Loop over Trigger list
+  //INPROGRESS read triggers from list std::string line;
+  //INPROGRESS read triggers from list while (std::getline("triggerList.txt", line))
+  //INPROGRESS read triggers from list {
+  //INPROGRESS read triggers from list     std::istringstream iss(line);
+  //INPROGRESS read triggers from list     int a, b;
+  //INPROGRESS read triggers from list     if (!(iss >> a >> b)) { break; } // error
+
+  //INPROGRESS read triggers from list     // process pair (a,b)
+  //INPROGRESS read triggers from list }
   t_metTree->Branch("pass_HLT_xe100_L1XE50",&pass_HLT_xe100_L1XE50);
   t_metTree->Branch("pass_HLT_xe110_mht_L1XE50",&pass_HLT_xe110_mht_L1XE50);
   t_metTree->Branch("pass_HLT_xe160_tc_lcw_L1XE50",&pass_HLT_xe160_tc_lcw_L1XE50);
@@ -112,6 +120,11 @@ StatusCode MakeTree::initialize() {
   t_metTree->Branch("pass_HLT_xe140_pueta_L1XE50",&pass_HLT_xe140_pueta_L1XE50);
   t_metTree->Branch("pass_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50",&pass_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50);
 
+  t_metTree->Branch("pass_HLT_xe110_pufit_L1XE60",&pass_HLT_xe110_pufit_L1XE60);
+  t_metTree->Branch("pass_HLT_xe120_pufit_L1XE60",&pass_HLT_xe120_pufit_L1XE60);
+  t_metTree->Branch("pass_HLT_xe110_pufit_wEFMu_L1XE60",&pass_HLT_xe110_pufit_wEFMu_L1XE60);
+  t_metTree->Branch("pass_HLT_xe120_mht_xe80_L1XE60",&pass_HLT_xe120_mht_xe80_L1XE60);
+  
   ATH_CHECK( histSvc->regTree("/METTREE/metTree", t_metTree) );
 
   //Setup bunch crossing tool 
@@ -222,9 +235,14 @@ StatusCode MakeTree::execute() {
   pass_HLT_xe140_pufit_L1XE50 = m_toolBox->isPassed("HLT_xe140_pufit_L1XE50");
   pass_HLT_xe140_pueta_L1XE50 = m_toolBox->isPassed("HLT_xe140_pueta_L1XE50");
   pass_HLT_xe110_mht_L1XE50_AND_xe70_L1XE50 = m_toolBox->isPassed("HLT_xe110_mht_L1XE50_AND_xe70_L1XE50");
+  
+  pass_HLT_xe110_pufit_L1XE60=m_toolBox->isPassed("HLT_xe110_pufit_L1XE60");
+  pass_HLT_xe120_pufit_L1XE60=m_toolBox->isPassed("HLT_xe120_pufit_L1XE60");
+  pass_HLT_xe110_pufit_wEFMu_L1XE60=m_toolBox->isPassed("HLT_xe110_pufit_wEFMu_L1XE60");
+  pass_HLT_xe120_mht_xe80_L1XE60=m_toolBox->isPassed("HLT_xe120_mht_xe80_L1XE60");
 
-
-  if (isSignalEvent) t_metTree->Fill();
+  //OLD only keep events passing event selection if (isSignalEvent) t_metTree->Fill();
+  t_metTree->Fill();
   return StatusCode::SUCCESS;
 }
 

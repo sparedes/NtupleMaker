@@ -23,8 +23,11 @@ namespace {
     int mhtPcellCol(kOrange-3);
     int tcCol(kGreen);
     int puetaCol(kPink);
+    //!!Change this for selection and datasts
     //TODO make this configurable
+    TString selection = "Wmunu";
     const char* sampleType("Data 2016, #sqrt{s}= 13 TeV");
+    const char* signalSel("W#rightarrow #mu#nu events");
     const char* labelTag("Internal");//could be "Preliminary","Trigger Operations", "Trigger Preliminary" etc.
 }
 
@@ -32,6 +35,15 @@ template<typename T> T* readKey(TObject* key) {
     TKey* asKey = dynamic_cast<TKey*>(key);
     return dynamic_cast<T*>(asKey->ReadObj());
 }
+//TString setSignalSel(TString* sel){
+//  TString signalSel;
+//  if (signal.Index("Wmunu" != -1)) signalSel = "W#rightarrow #mu#nu events";
+//  //else if (sel == "Wenu") signalSel = "W#rightarrow e#nu events";
+//  //else if (sel == "Zmumu") signalSel = "Z#rightarrow #mu#mu events";
+//  //else if (sel == "Zee") signalSel = "Z#rightarrow ee events";
+//  else signalSel = "no presel";
+//  return signalSel;
+//}
 
 void setTrigMETStyle(TH1* hist){
   //setting default colors for each met ALG
@@ -52,6 +64,8 @@ void setTrigMETStyle(TH1* hist){
   else if (histName.Index("tc") != -1) {
     hist->SetMarkerColor(tcCol);
     hist->SetLineColor(tcCol);
+  }
+  else if (histName.Index("VS") != -1) {
   }
   else if (histName.Index("pueta") != -1) {
     hist->SetMarkerColor(puetaCol);
@@ -99,7 +113,8 @@ void plotHist(string fileType = "eps"){
 
   //gStyle->SetOptTitle(kTRUE);
   
-  //loop over all histograms in the file
+  //loop const char*over all histograms in the file
+  //
   for(auto histoKey : *(myHistoFile->GetListOfKeys())) {
     auto metHisto = readKey<TH1>(histoKey);
     if(metHisto == nullptr) break;
@@ -110,9 +125,13 @@ void plotHist(string fileType = "eps"){
     TString histoName = metHisto->GetName();
     TGaxis::SetMaxDigits(3);
     metHisto->Draw("COLZ");
+    if (histoName.Index("VS") != -1) {
+      gPad->SetLogz();
+    }
     //path to save file
     TString nametext = "plots/firstTests/";
     nametext += metHisto->GetName();    
+    nametext += selection;    
     nametext += ".";    
     nametext += fileType;    
     //creating labels
@@ -122,6 +141,7 @@ void plotHist(string fileType = "eps"){
     pave->SetFillColor(0);
     pave->SetTextSize(0.); 
     pave->AddText(sampleType); 
+    pave->AddText(signalSel); 
     pave->Draw(); 
     C->Print(nametext);
     C->Clear();
@@ -146,10 +166,11 @@ void plotEff(string fileType = "eps"){
     //setting default colors
     setTrigMETStyle(metEff);
 
-    metEff->SetTitle(";offline E_{Tmiss} [GeV]; Efficiency");
+    metEff->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency");
     metEff->Draw("AP");
     TString nametext = "plots/firstTests/";
     nametext += metEff->GetName();    
+    nametext += selection;    
     nametext += ".";    
     nametext += fileType;    
     cout<<nametext<<endl;
@@ -159,6 +180,7 @@ void plotEff(string fileType = "eps"){
     pave->SetFillStyle(0);
     pave->SetTextSize(0.); 
     pave->AddText(sampleType); 
+    pave->AddText(signalSel); 
     pave->Draw(); 
     TString legendText(effName(effName.Index("HLT"),effName.Length()));
     legend->AddEntry(metEff->GetName(),legendText,"ep");
@@ -172,10 +194,9 @@ void plotAllEff(string fileType = "eps"){
   TFile *myEffFile = TFile::Open("metEfficiencies.root");
   TCanvas *C = new TCanvas("atlas_rectangular","Canvas title",0.,0.,800,600);
 
-  string selection = "Zmumu";
   //gStyle->SetOptTitle(kTRUE);
 
-  auto legend = new TLegend(0.45,0.2,0.89,0.4);
+  auto legend = new TLegend(0.36,0.2,0.89,0.4);
   
   int nEf = 0;
   for(auto effKey : *(myEffFile->GetListOfKeys())) {
@@ -187,7 +208,7 @@ void plotAllEff(string fileType = "eps"){
     //setting default colors
     setTrigMETStyle(metEff);
 
-    metEff->SetTitle(";offline E_{Tmiss} [GeV]; Efficiency");
+    metEff->SetTitle(";E_{Tmiss} [GeV] (offline, no #mu); Cumulative Efficiency");
     if (nEf == 0) metEff->Draw("AP");
     else metEff->Draw("SAMEP");
     TString effName = metEff->GetName();
@@ -201,12 +222,13 @@ void plotAllEff(string fileType = "eps"){
   nametext += ".";    
   nametext += fileType;    
   cout<<nametext<<endl;
-  ATLASLabel(0.6,0.5,labelTag);
-  TPaveText* pave = new TPaveText(0.62,0.42,0.85,0.5,"NDC");
+  ATLASLabel(0.6,0.55,labelTag);
+  TPaveText* pave = new TPaveText(0.62,0.42,0.85,0.55,"NDC");
   pave->SetBorderSize(0);
   pave->SetFillStyle(0);
   pave->SetTextSize(0.); 
   pave->AddText(sampleType); 
+  pave->AddText(signalSel); 
 
   legend->SetBorderSize(0);
   legend->SetFillStyle(0);
